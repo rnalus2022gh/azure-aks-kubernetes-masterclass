@@ -37,6 +37,7 @@
 ```
 # Template
 az aks get-credentials --resource-group <Resource-Group-Name> --name <Cluster-Name>
+az aks get-credentials --resource-group deleterg --name aksdemo1
 
 # Replace Resource Group & Cluster Name
 az aks get-credentials --resource-group aks-rg1 --name aksdemo1
