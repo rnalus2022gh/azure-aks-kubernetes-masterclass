@@ -148,6 +148,14 @@ kubectl logs -f my-first-pod
 kubectl exec -it <pod-name> -- /bin/bash
 kubectl exec -it my-first-pod -- /bin/bash
 
+# rome - shoud be:
+kubectl exec my-first-pod -it -- bash -il
+
+# rome - date command
+$ kubectl exec my-first-pod -- date
+Tue Oct 12 12:31:47 UTC 2021
+https://github.com/saturnism/kubernetes.github.io/blob/master/docs/user-guide/kubectl/kubectl_exec.md
+
 # Execute some commands in Nginx container
 ls
 cd /usr/share/nginx/html
