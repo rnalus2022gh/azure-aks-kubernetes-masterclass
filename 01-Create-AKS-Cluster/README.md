@@ -56,6 +56,9 @@ kubectl get ns
 # List Pods from all namespaces
 kubectl get pods --all-namespaces
 
+# rome - get pods for a specific namespace
+kubectl get pods --namespace kube-system
+
 # List all k8s objects from Cluster Control plane
 kubectl get all --all-namespaces
 ```
@@ -119,11 +122,48 @@ kubectl apply -f kube-manifests/
 # Verify Pods
 kubectl get pods
 
+# rome -Verify pods in a specific namespace , to check deployment got to a browser with External-IP of the app deployed: 
+"Welcome to Stack Simplify
+Kubernetes Fundamentals Demo
+Application Version: V1"
+
+kubectl get pods --namespace default
+
 # Verify Deployment
 kubectl get deployment
 
 # Verify Service (Make a note of external ip)
 kubectl get service
+# rome - this will list the LoadBalancer info:
+
+$ kubectl get service
+NAME                  TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
+kubernetes            ClusterIP      10.0.0.1      <none>          443/TCP        13m
+myapp1-loadbalancer   LoadBalancer   10.0.97.102   20.43.170.210   80:32716/TCP   4m28s
+
+# rome - To get logs for the deployment, run the command
+
+$ kubectl get pod
+NAME                                READY   STATUS    RESTARTS   AGE
+myapp1-deployment-58ccb86d9-lqxjn   1/1     Running   0          5m36s
+myapp1-deployment-58ccb86d9-z465w   1/1     Running   0          5m36s
+
+$ kubectl logs -f myapp1-deployment-58ccb86d9-lqxjn
+
+# rome - to see all events, run commands
+$ kubectl describe pod myapp1-deployment-58ccb86d9-lqxjn
+
+# rome - to see all deployment, run command
+$ kubectl get deployments/deploy
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+myapp1-deployment   2/2     2            2           10m
+
+# rome - to see all services, run command
+$ kubectl get services/svc
+NAME                  TYPE           CLUSTER-IP    EXTERNAL-IP     PORT(S)        AGE
+kubernetes            ClusterIP      10.0.0.1      <none>          443/TCP        20m
+myapp1-loadbalancer   LoadBalancer   10.0.97.102   20.43.170.210   80:32716/TCP   11m
+
 
 # Access Application
 http://<External-IP-from-get-service-output>
@@ -134,6 +174,8 @@ http://<External-IP-from-get-service-output>
 # Delete Applications
 kubectl delete -f kube-manifests/
 ```
+deployment.apps "myapp1-deployment" deleted
+service "myapp1-loadbalancer" deleted
 
 ## References
 - https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-macos?view=azure-cli-latest
