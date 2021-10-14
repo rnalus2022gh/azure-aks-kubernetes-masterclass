@@ -49,3 +49,6 @@ az account list
 
 # Delete AKS cluster
 az aks delete --name aksdemo1 --resource-group aks-rg1
+
+
+

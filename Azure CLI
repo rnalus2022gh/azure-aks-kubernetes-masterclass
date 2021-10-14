@@ -1,0 +1,646 @@
+#!/bin/bash
+
+# check it is installed and view the version
+az --version
+
+# login
+az login
+
+# show subscriptions
+az account list
+
+# show currently selected subscription
+az account show
+
+# select subscription by id
+az account set -s "fbdcf71e-154e-4a57-96ac-9b0c3267f3ce"
+
+# or use the name
+az account set -s "MVP (VS Enterprise)"
+
+## DEMO 2 - Getting help
+
+# getting help: view list of subscommands
+az
+
+# see the help for a subscommand:
+az webapp
+
+# get help on a subcommamd
+az webapp create -h
+
+# use the interactive console
+az interactive
+
+## DEMO 3 - using the output
+
+# default JSON output
+az webapp list
+
+# table output
+az webapp list -o table
+
+# tsv output
+az webapp list -o tsv
+
+# color json!
+az webapp list -o jsonc
+
+## DEMO 4 - query strings
+az functionapp show -n whosplayingfuncs -g whosplayingfuncs
+az group show -n NetworkWatcherRG 
+
+
+# get one property
+az functionapp show -n whosplayingfuncs -g whosplayingfuncs --query state
+az group show -n NetworkWatcherRG --query id
+
+# two properties
+az functionapp show -n whosplayingfuncs -g whosplayingfuncs --query "[state,ftpPublishingUrl]"
+az functionapp show -n whosplayingfuncs -g whosplayingfuncs --query "{State:state,Ftp:ftpPublishingUrl}"
+
+az group show -n NetworkWatcherRG --query "[id,type,properties]"
+
+az group show -n NetworkWatcherRG --query "{ID:id,TYPE:type,PROPERTIES:properties}"
+
+jmespath.org
+
+# filtering arrays - doesn't work
+az functionapp list --query state
+az functionapp list --query "[].state"
+az functionapp list --query "[].{Name:name,Group:resourceGroup,State:state}"
+az functionapp list --query "[0].{Name:name,Group:resourceGroup,State:state}"
+
+az account list --query "[].state"
+az account list --query "[0].state"
+az account list --query "[0].{Name:name,Group:resourceGroup,State:state}"
+
+az functionapp config appsettings list -n whosplayingfuncs -g whosplayingfuncs
+az functionapp config appsettings list -n whosplayingfuncs -g whosplayingfuncs --query "[?name=='FUNCTIONS_EXTENSION_VERSION']"
+az functionapp config appsettings list -n whosplayingfuncs -g whosplayingfuncs --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value"
+az functionapp config appsettings list -n whosplayingfuncs -g whosplayingfuncs --query "[?name=='FUNCTIONS_EXTENSION_VERSION'].value" -o tsv
+
+az account list --query "[?name=='AzureFree-RomeNalus']"
+az account list --query "[?name=='AzureFree-RomeNalus'].state"
+[
+  "Enabled"
+]
+az account list --query "[?name=='AzureFree-RomeNalus'].state" -o tsv
+Enabled
+
+az network public-ip show -n mypublicip -g myresourcegroup --query ipAddress -o tsv
+az keyvault secret show --vault-name mykeyvault --name mysecretname --query value -o tsv
+az network lb show -n myloadbalancer -g myresourcegroup --query "inboundNatRules[].frontendPort" -o tsv
+
+
+Chapter3
+---------------------
+# DEMO 1 - exploring images
+
+# see the VM sub-options
+az vm -h
+
+# show the most commonly used ones
+az vm image list -o table
+
+# search all images for specific "offer"
+az vm image list --all -f elasticsearch -o table #also try VisualStudio, Wordpress
+
+# search all images for a specific "sku"
+az vm image list -s VS-2017 --all -o table
+
+# see all the vm sizes available in a specific location
+az vm list-sizes --location westeurope -o table
+
+# DEMO 2 - Creating the VM
+
+ResourceGroupName="CreateVmDemo"
+
+az group create --name $ResourceGroupName --location westeurope
+
+az vm create -h | more
+
+VmName="ExampleVm"
+AdminPassword="P1ur@15ight!"
+
+az vm create \
+    --resource-group $ResourceGroupName \
+    --name $VmName \
+    --image win2016datacenter \
+    --admin-username azureuser \
+    --admin-password $AdminPassword
+    # money saving tips:
+    # --size Basic_A1
+    # --use-unmanaged-disk
+    # --storage-sku Standard_LRS
+
+# see what's in the group
+az resource list -g $ResourceGroupName -o table
+
+# see what size VM it created for us
+az vm show -g $ResourceGroupName -n $VmName --query "hardwareProfile.vmSize"
+
+# DEMO 3 - updating the VM
+
+# remind ourselves what the public ip was
+az vm list-ip-addresses -n $VmName -g $ResourceGroupName -o table
+
+# open port 80
+az vm open-port --port 80 --resource-group $ResourceGroupName --name $VmName
+
+# install IIS with a custom Powershell script
+az vm extension set \
+--publisher Microsoft.Compute \
+--version 1.8 \
+--name CustomScriptExtension \
+--vm-name $VmName \
+--resource-group $ResourceGroupName \
+--settings extensionSettings.json
+
+
+# DEMO 4 - stopping
+
+# see available commands for stopping and starting VMs
+az vm -h
+
+# see what state it is in - it's running
+az vm show -d -g $ResourceGroupName -n $VmName --query "powerState" -o tsv
+
+# stop and deallocate so we no longer pay for resources
+az vm deallocate -n $VmName -g $ResourceGroupName
+
+# check its stopped
+az vm show -d -g $ResourceGroupName -n $VmName --query "powerState" -o tsv
+
+# lets start it back up again
+az vm start -n $VmName -g $ResourceGroupName
+
+# another way to get the public ip
+az vm show -d -g $ResourceGroupName -n $VmName --query "publicIps" -o tsv
+
+# remind ourselves what is in the group
+az resource list -g $ResourceGroupName -o table
+
+# delete the whole resource group
+az group delete --name $ResourceGroupName --yes
+
+
+Chapter4
+--------------
+# make sure you have the correct subscription set up
+az account set -s "My Subscription"
+
+# store some variable
+resourceGroup="CliStorageTest"
+location="westeurope"
+storageAccount="cliblobtest"
+
+# create our resource group
+az group create -n $resourceGroup -l $location
+
+# get some help on creating a storage account
+az storage account create -h
+
+# create a storage account
+az storage account create -n $storageAccount -g $resourceGroup -l $location --sku Standard_LRS
+
+# get the connection string
+connectionString=`az storage account show-connection-string -n $storageAccount -g $resourceGroup --query connectionString -o tsv`
+
+echo $connectionString
+
+# BLOBS
+
+# learn more about az storage subgroups of commands
+az storage -h
+
+# learn more about how to create a container
+az storage container create -h
+
+# create a new container with public access
+az storage container create -n "public" --public-access blob --connection-string $connectionString
+
+# save our connection string into an environment variable to save us passing it to every commmand
+export AZURE_STORAGE_CONNECTION_STRING=$connectionString
+# in powershell:  $env:AZURE_STORAGE_CONNECTION_STRING = $connectionString
+
+# create a private container
+az storage container create -n "private" --public-access off
+
+# create a demo file
+echo "Hello World" > example.txt
+cat example.txt
+
+# upload the demo file to the public container
+az storage blob upload -c "public" -f "example.txt" -n "test.txt"
+
+# get the URL of the blob
+az storage blob url -c "public" -n "test.txt" -o tsv
+
+# the blob name for where we will upload it into the private container
+blobName="secret/private.txt"
+
+# upload the file into the private container with the specified name
+az storage blob upload -c "private" -f "example.txt" -n $blobName
+
+# get the URL of the blob in the private container
+az storage blob url -c "private" -n $blobName -o tsv
+
+# generate a time limited read-only shared access signature for the private blob
+az storage blob generate-sas -c "private" -n $blobName \
+    --permissions r -o tsv \
+    --expiry 2017-10-15T13:24Z
+
+# see more things you can do with blobs
+az storage blob -h
+
+
+# QUEUES
+
+#the queue name we'll use
+queueName="myqueue"
+
+# create a new queue
+az storage queue create -n $queueName
+
+# put some messages onto the queue
+az storage message put --content "Hello from CLI" -q $queueName
+az storage message put --content "Hello from CLI 2" -q $queueName
+
+# get a message and give ourselves two minutes to process it
+az storage message get -q $queueName --visibility-timeout 120
+
+# delete the message from the queue
+az storage message delete --id "25b802f4-5e7e-4ecb-9a70-55a06f9c5c6c" --pop-receipt "AgAAAAMAAAAAAAAAPNz4JMVE0wE=" -q $queueName
+
+# TABLES
+
+# the table name we'll use
+tableName="mytable"
+
+# create the table
+az storage table create -n $tableName
+
+# insert a new row into the table
+az storage entity insert -t $tableName -e PartitionKey="Settings" RowKey="Timeout" Value=10 Description="Timeout in seconds"
+
+# and insert another row
+az storage entity insert -t $tableName -e PartitionKey="Settings" RowKey="MaxRetries" Value=4 Description="Maximum Retries"
+
+# read rows from our table without a filter
+az storage entity query -t $tableName
+
+# learn more about filters: https://docs.microsoft.com/en-us/rest/api/storageservices/Querying-Tables-and-Entities?redirectedfrom=MSDN
+
+# query for a specific partition key
+az storage entity query -t $tableName --filter "PartitionKey eq 'Settings'"
+
+# query for a specific value in a custom column
+az storage entity query -t $tableName --filter 'Value eq 10'
+
+# replace a row with the given row and partition key
+az storage entity replace -t $tableName -e PartitionKey="Settings" RowKey="MaxRetries" Value=5 Description="Maximum Retries"
+
+# update columns in the row with the specified row and partition key
+az storage entity merge -t $tableName -e PartitionKey="Settings" RowKey="MaxRetries" Value=6
+
+# retrieve the contents of a single row
+az storage entity show -t $tableName --partition-key "Settings" --row-key "MaxRetries"
+
+# SHARES
+
+# name of our file share
+fileShare="myshare"
+
+# create the file share with a 2GB quota
+az storage share create -n $fileShare --quota 2
+
+# upload an example file
+az storage file upload -s $fileShare --source "example.txt"
+
+# list files in the fileshare
+az storage file list -s $fileShare
+
+
+# learn more about what you can do with file shares
+az storage file -h
+
+# cleaning up
+az group delete -n $resourceGroup --yes
+
+
+Chapter5
+-----------------
+# DEMO 1 Create an app service plan and web app
+
+# Reminder: log in with az login
+# Reminder: choose subscription with az account set -s "Subscription name or GUID"
+
+# set up some variables
+resourceGroup="CliWebAppDemo"
+location="westeurope"
+
+# create a resource group
+az group create -n $resourceGroup -l $location
+
+# see the options for creating an app service plan
+az appservice plan create -h
+
+# create the app service plan
+planName="CliWebAppDemo"
+az appservice plan create -n $planName -g $resourceGroup --sku B1
+
+# create the webapp
+appName="pluralsightclidemo"
+az webapp create -n $appName -g $resourceGroup --plan $planName
+
+# discover the URI
+az webapp show -n $appName -g $resourceGroup --query "defaultHostName"
+
+# DEMO 2 Configure git deployment
+gitrepo="https://github.com/markheath/azure-cli-snippets"
+
+# configure the app to deploy from a GitHub repo
+az webapp deployment source config -n $appName -g $resourceGroup \
+    --repo-url $gitrepo --branch master --manual-integration
+
+# request a sync
+az webapp deployment source sync -n $appName -g $resourceGroup
+
+# DEMO 3 create a SQL server and database
+
+sqlServerName="pluralsightclidemo"
+sqlServerUsername="mheath"
+sqlServerPassword='!SecureP@assword1'
+
+# create the SQL server
+az sql server create -n $sqlServerName -g $resourceGroup \
+            -l $location -u $sqlServerUsername -p $sqlServerPassword
+
+databaseName="SnippetsDatabase"
+
+# discover available editions
+az sql db list-editions -l $location -o table
+
+# create the database
+az sql db create -g $resourceGroup -s $sqlServerName -n $databaseName \
+          --service-objective Basic
+
+# DEMO 4 Connect SQL server to web app
+
+# see the outbound IP addresses our web app is using
+az webapp show -n $appName -g $resourceGroup --query "outboundIpAddresses" \
+               -o tsv
+
+# allow the special 0.0.0.0 ip address access to SQL server ()
+az sql server firewall-rule create -g $resourceGroup -s $sqlServerName \
+     -n AllowWebApp1 --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+# construct the connection string
+connectionString="Server=tcp:$sqlServerName.database.windows.net;Database=$databaseName;User ID=$sqlServerUsername@$sqlServerName;Password=$sqlServerPassword;Trusted_Connection=False;Encrypt=True;"
+
+# provide add the connection string to the web app
+az webapp config connection-string set \
+    -n $appName -g $resourceGroup \
+    --settings "SnippetsContext=$connectionString" \
+    --connection-string-type SQLAzure
+
+# DEMO 5 - Backup and restore the database
+
+# get hold of the storage account connection string for the backup
+storageAccount="assetswe"
+storageResourceGroup="SharedAssets"
+storageConnectionString=`az storage account show-connection-string -n $storageAccount -g $storageResourceGroup --query connectionString -o tsv`
+
+# extract just the storage key
+storageKey=`echo $storageConnectionString | grep -oP "AccountKey=\K.+"`
+
+# generate a unique filename for the backup
+now=$(date +"%Y-%m-%d-%H-%M")
+backupFileName="backup-$now.bacpac"
+
+# perform the database backup
+az sql db export -s $sqlServerName -n $databaseName -g $resourceGroup \
+-u $sqlServerUsername -p $sqlServerPassword \
+--storage-key-type StorageAccessKey --storage-key $storageKey \
+--storage-uri "https://$storageAccount.blob.core.windows.net/bacpacs/$backupFileName" 
+
+# generate a new empty database
+databaseName2="SnippetsDatabase2"
+az sql db create -g $resourceGroup -s $sqlServerName -n $databaseName2 \
+--service-objective Basic
+
+# import the backup to a new database
+az sql db import -s $sqlServerName -n $databaseName2 -g $resourceGroup \
+-u $sqlServerUsername -p $sqlServerPassword \
+--storage-key-type StorageAccessKey --storage-key $storageKey \
+--storage-uri "https://$storageAccount.blob.core.windows.net/bacpacs/$backupFileName" 
+
+# create a connection string for the new database
+connectionString2="Server=tcp:$sqlServerName.database.windows.net;Database=$databaseName2;User ID=$sqlServerUsername@$sqlServerName;Password=$sqlServerPassword;Trusted_Connection=False;Encrypt=True;"
+
+# update the web app to point to the new database
+az webapp config connection-string set \
+    -n $appName -g $resourceGroup \
+    --settings "SnippetsContext=$connectionString2" \
+    --connection-string-type SQLAzure
+
+
+Chapter6
+-------------------------
+
+# create a resource group
+resourceGroup="armtest"
+location="westeurope"
+az group create -l $location -n $resourceGroup
+
+# the template we will deploy
+templateUri="https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/docker-wordpress-mysql/azuredeploy.json"
+
+# deploy, specifying all template parameters directly
+az group deployment create \
+    --name TestDeployment \
+    --resource-group $resourceGroup \
+    --template-uri $templateUri \
+    --parameters 'newStorageAccountName=myvhds96' \
+                 'mysqlPassword=My5q1P@s5w0rd!' \
+                 'adminUsername=mheath' \
+                 'adminPassword=Adm1nP@s5w0rd!' \
+                 'dnsNameForPublicIP=mypublicip72'
+
+# see what's in the group we just created
+az resource list -g $resourceGroup -o table
+
+# find out the domain name we can access this from
+az network public-ip list -g $resourceGroup --query "[0].dnsSettings.fqdn" -o tsv
+
+# browse to mypublicip72.westeurope.cloudapp.azure.com
+
+# if it doesn't work, SSH in:
+ssh mheath@mypublicip72.westeurope.cloudapp.azure.com
+
+# see if the wordpress container has exited
+docker ps --all
+
+# check the logs wordpress container
+docker logs e03
+
+# restart the wordpress container
+docker start e03
+
+
+# demo 2 exporting a template from a resource group (may fail due to bug in current CLI)
+az group export -n CliWebAppDemo
+
+# demo 3 - incremental deployments
+
+# create our resource group
+resourceGroup="templatedeploytest"
+az group create -n $resourceGroup -l westeurope
+
+# to validate the template
+az group deployment validate -g $resourceGroup \
+        --template-file MySite.json \
+        --parameters @MySite.parameters.json
+
+# perform the initial deployment
+deploymentName="MyDeployment"
+sqlPassword='!P@s5w0rd123'
+az group deployment create -g $resourceGroup -n $deploymentName \
+        --template-file MySite.json \
+        --parameters @MySite.parameters.json \
+        --parameters "administratorLoginPassword=$sqlPassword"
+# n.b. if this fails, it is often just the Git sync - just trigger a resync
+
+
+# see the web apps that got created
+az webapp list -g $resourceGroup \
+        --query "[].defaultHostName" -o tsv
+
+# deploy an updated version of the template with incremental mode 
+# (creates new resources only, does not delete)
+az group deployment create -g $resourceGroup -n $deploymentName \
+        --template-file MySiteV2.json \
+        --parameters @MySite.parameters.json \
+        --parameters "administratorLoginPassword=$sqlPassword" \
+        --mode Incremental
+
+# see the web apps that got created (should be two this time)
+az webapp list -g $resourceGroup \
+        --query "[].defaultHostName" -o tsv
+
+# deploy the original template again in complete mode
+# (will cause the additional webapp in V2 template to be deleted)
+az group deployment create -g $resourceGroup -n $deploymentName \
+        --template-file MySite.json \
+        --parameters @MySite.parameters.json \
+        --parameters "administratorLoginPassword=$sqlPassword" \
+        --mode Complete
+
+# check that there is now only one web app in the resource group again
+az webapp list -g $resourceGroup \
+        --query "[].defaultHostName" -o tsv
+
+Chapter7
+------------------
+# select correct subscription with 
+az account set -s "my subscription name"
+
+# a name for our azure ad app
+appName="ServicePrincipalDemo1"
+
+# create an Azure AD app
+az ad app create \
+    --display-name $appName \
+    --homepage "http://localhost/$appName" \
+    --identifier-uris "http://localhost/$appName"
+
+# get the app id
+appId=$(az ad app list --display-name $appName --query [].appId -o tsv)
+
+# choose a password for our service principal
+spPassword="My5erv1c3Pr1ncip@l1!"
+
+# create a service principal
+az ad sp create-for-rbac --name $appId --password $spPassword 
+
+# get the app id of the service principal
+servicePrincipalAppId=$(az ad sp list --display-name $appId --query "[].appId" -o tsv)
+
+# view the default role assignment (it will be contributor access to the whole subscription)
+az role assignment list --assignee $servicePrincipalAppId
+
+# get the id of that default assignment
+roleId=$(az role assignment list --assignee $servicePrincipalAppId --query "[].id" -o tsv)
+
+# delete that role assignment
+az role assignment delete --ids $roleId
+
+# make a resource group that we will allow our service principal contributor rights to
+resourceGroup="MyVmDemo"
+az group create -n $resourceGroup -l westeurope
+
+# get our subscriptionId
+subscriptionId=$(az account show --query id -o tsv)
+
+# grant contributor access just to this resource group only
+az role assignment create --assignee $servicePrincipalAppId \
+        --role "contributor" \
+        --scope "/subscriptions/$subscriptionId/resourceGroups/$resourceGroup"
+
+# n.b to see this assignment, you neeed the --all flag:
+az role assignment list --assignee $servicePrincipalAppId --all
+
+# get the tenant id
+tenantId=$(az account show --query tenantId -o tsv)
+
+# now let's logout
+az logout
+
+# and log back in with the service principal
+az login --service-principal -u $servicePrincipalAppId \
+         --password $spPassword --tenant $tenantId
+
+# what groups can we see? should be just one:
+az group list -o table
+
+# can we create a new resource group? should be denied:
+az group create -n NotAllowed -l westeurope
+
+# but we should be able to create a VM:
+vmName="ExampleVm"
+adminPassword="ARe@11y5ecur3P@ssw0rd!"
+
+az vm create \
+    --resource-group $resourceGroup \
+    --name $vmName \
+    --image win2016datacenter \
+    --admin-username azureuser \
+    --admin-password $adminPassword \
+    --size Basic_A1 \
+    --use-unmanaged-disk \
+    --storage-sku Standard_LRS
+
+# check its running state
+az vm show -d -g $resourceGroup -n $vmName --query "powerState" -o tsv
+
+# cleaning up - log out and log back in again with regular credentials
+az logout
+az login
+
+# delete the service principal
+az ad sp delete --id $servicePrincipalAppId
+
+# delete the ad app
+az ad app delete --id $appId
+
+# delete the resource group with our test VM
+az group delete -n $resourceGroup --yes
+
+
+# providing the credentials to a functionapp
+functionappName="markfunctionapp"
+functionappGroup="AzureFunctions-WestEurope"
+az functionapp config appsettings set -n $functionappName -g $functionappGroup \
+--settings "SERVICE_PRINCIPAL=$servicePrincipalAppId"  \
+"SERVICE_PRINCIPAL_SECRET=$spPassword" "TENANT_ID=$tenantId"

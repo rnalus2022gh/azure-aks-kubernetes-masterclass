@@ -1,0 +1,4 @@
+{
+    "fileUris":["https://assetswe.blob.core.windows.net/public/SetupSimpleSite.ps1"], 
+    "commandToExecute":"powershell.exe -ExecutionPolicy Unrestricted -file SetupSimpleSite.ps1"
+}
