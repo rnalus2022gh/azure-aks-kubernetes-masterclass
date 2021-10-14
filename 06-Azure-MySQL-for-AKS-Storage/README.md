@@ -42,6 +42,8 @@
 ```
 # Template
 mysql --host=mydemoserver.mysql.database.azure.com --user=myadmin@mydemoserver -p
+# Rome - DB Login
+mysql --host=akswebappdbrome.mysql.database.azure.com --user=dbyadmin@akswebappdbrome -p
 
 # 
 mysql --host=akswebappdb.mysql.database.azure.com --user=dbadmin@akswebappdb -p
@@ -67,6 +69,9 @@ kubectl apply -f kube-manifests/01-MySQL-externalName-Service.yml
 ```
 # Template
 kubectl run -it --rm --image=mysql:5.7.22 --restart=Never mysql-client -- mysql -h <AZURE-MYSQ-DB-HOSTNAME> -u <USER_NAME> -p<PASSWORD>
+
+# Rome - DB login
+kubectl run -it --rm --image=mysql:5.7.22 --restart=Never mysql-client -- mysql -h akswebappdbrome.mysql.database.azure.com -u dbadmin@akswebapdbprome -pcur5@NIA
 
 # Replace Host Name of Azure MySQL Database and Username and Password
 kubectl run -it --rm --image=mysql:5.7.22 --restart=Never mysql-client -- mysql -h akswebappdb.mysql.database.azure.com -u dbadmin@akswebappdb -pRedhat1449
@@ -125,3 +130,13 @@ kubectl get all
 
 # Delete Azure MySQL Database
 ```
+# Rome - Delete Azure MySQL
+
+az mysql server delete --name akswebappdbrome --resource-group aks-rg1 --yes
+
+az mysql server delete [--ids]
+                       [--name]
+                       [--resource-group]
+                       [--subscription]
+                       [--yes]
+

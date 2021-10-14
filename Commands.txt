@@ -50,5 +50,16 @@ az account list
 # Delete AKS cluster
 az aks delete --name aksdemo1 --resource-group aks-rg1
 
+Section 7 Azure MySQL Database
+------------------------------
+Deploy using template
+az deployment group create --resource-group aks-rg1 --template-file template/dbtemplate.json --parameters template/dbparameters.json
+
+https://www.base64encode.org/
+Y3VyNUBOSUE=
+
+
+# Rome - Delete Azure MySQL
+az mysql server delete --name akswebappdbrome --resource-group aks-rg1 --yes
 
 

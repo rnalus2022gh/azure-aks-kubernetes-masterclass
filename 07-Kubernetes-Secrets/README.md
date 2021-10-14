@@ -25,6 +25,12 @@ data:
   # Output of echo -n 'Redhat1449' | base64
   db-password: ZGJwYXNzd29yZDEx
 ```
+# Rome - my file
+type: Opaque
+data:
+  # Output of echo -n 'cur5@NIA' | base64
+  db-password: Y3VyNUBOSUE=
+
 ## Step-03: Update secret in MySQL Deployment for DB Password
 ```yml
           env:
