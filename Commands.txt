@@ -1,0 +1,20 @@
+ az group create --name aks-rg1 --location southeastasia
+
+az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+kubectl get nodes
+
+az aks delete --resource-group aks-rg1 --name aksdemo1
+
+az deployment group create --resource-group aks-rg1 --template-file <path-to-template> --parameters <path-to-parameters>
+
+How to use Azure Resource Manager (ARM) deployment templates with Azure CLI
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli
+
+Tutorial: Use parameter files to deploy your ARM template
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-use-parameter-file?tabs=azure-cli
+
+Deploy resources with ARM templates and Azure PowerShell
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-powershell
+
+az deployment group create --resource-group aks-rg1 --template-file template/template.json  --parameters --parameters template/parameters.json
