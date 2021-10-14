@@ -1,12 +1,11 @@
- az group create --name aks-rg1 --location southeastasia
+az group create --name aks-rg1 --location southeastasia
 
 az aks get-credentials --resource-group aks-rg1 --name aksdemo1
-
-kubectl get nodes
 
 az aks delete --resource-group aks-rg1 --name aksdemo1
 
 az deployment group create --resource-group aks-rg1 --template-file <path-to-template> --parameters <path-to-parameters>
+az deployment group create --resource-group aks-rg1 --template-file template/template.json --parameters template/parameters.json
 
 How to use Azure Resource Manager (ARM) deployment templates with Azure CLI
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli
@@ -17,4 +16,30 @@ https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template
 Deploy resources with ARM templates and Azure PowerShell
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-powershell
 
-az deployment group create --resource-group aks-rg1 --template-file template/template.json  --parameters --parameters template/parameters.json
+Effective ways to delete resources in a resource group on Azure in 2021
+https://www.codeisahighway.com/effective-ways-to-delete-resources-in-a-resource-group-on-azure-in-2021/
+
+https://docs.microsoft.com/en-us/cli/azure/group?view=azure-cli-latest#az_group_delete
+
+az group delete --name 
+                [--force-deletion-types]
+                [--no-wait]
+                [--subscription]
+                [--yes]
+
+az group delete --name DefaultResourceGroup-SEA --yes
+
+https://docs.microsoft.com/en-us/cli/azure/network/vnet?view=azure-cli-latest#az_network_vnet_delete
+az network vnet delete [--ids]
+                       [--name]
+                       [--resource-group]
+                       [--subscription]
+
+az network vnet delete --name aks-rg1-vnet --resource-group aks-rg1
+
+az group delete --name aks-rg1 --yes
+
+az group create --name aks-rg1 --location southeastasia
+
+https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest
+az account list

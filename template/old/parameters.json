@@ -44,6 +44,15 @@
         "dockerBridgeCidr": {
             "value": "172.17.0.1/16"
         },
+        "workspaceName": {
+            "value": "DefaultWorkspace-2ab8d172-64aa-4bd9-b089-8f1a5df9d899-SEA"
+        },
+        "omsWorkspaceId": {
+            "value": "/subscriptions/2ab8d172-64aa-4bd9-b089-8f1a5df9d899/resourceGroups/DefaultResourceGroup-SEA/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-2ab8d172-64aa-4bd9-b089-8f1a5df9d899-SEA"
+        },
+        "workspaceRegion": {
+            "value": "southeastasia"
+        },
         "networkPolicy": {
             "value": "azure"
         }

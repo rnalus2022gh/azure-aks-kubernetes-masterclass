@@ -71,6 +71,7 @@ kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h 
 
 # Verify usermgmt schema got created which we provided in ConfigMap
 mysql> show schemas;
+exit
 ```
 
 ## Step-05: Clean-Up 
@@ -82,7 +83,7 @@ kubectl delete -f kube-manifests/
 ## Step-06: Delete PV exclusively - It exists due to retain policy
 ```
 # List PV
-kubect get pv
+kubectl get pv
 
 # Delete PV exclusively
 kubectl get pv
