@@ -48,7 +48,7 @@ https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest
 az account list
 
 # Delete AKS cluster
-az aks delete --name aksdemo1 --resource-group aks-rg1
+az aks delete --name aksdemo1 --resource-group aks-rg1 --yes
 
 Section 7 Azure MySQL Database
 ------------------------------

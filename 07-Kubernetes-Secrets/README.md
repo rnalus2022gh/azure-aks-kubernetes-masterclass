@@ -80,3 +80,7 @@ kubectl get pods
 # Verify sc, pvc, pv
 kubectl get sc,pvc,pv
 ```
+
+# Rome - Delete Azure disk or AKS cluster
+
+az aks delete --name aksdemo1 --resource-group aks-rg1 --yes
