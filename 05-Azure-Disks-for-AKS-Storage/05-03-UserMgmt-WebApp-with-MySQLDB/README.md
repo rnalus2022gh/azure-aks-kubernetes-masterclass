@@ -89,6 +89,7 @@ mysql> show schemas;
 mysql> use webappdb;
 mysql> show tables;
 mysql> select * from user;
+exit
 ```
 
 ## Step-06: Clean-Up
