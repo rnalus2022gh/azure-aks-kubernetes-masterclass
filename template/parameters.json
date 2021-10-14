@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "value": "aksdemo1"
+        },
+        "location": {
+            "value": "southeastasia"
+        },
+        "dnsPrefix": {
+            "value": "aksdemo1-dns"
+        },
+        "kubernetesVersion": {
+            "value": "1.20.9"
+        },
+        "networkPlugin": {
+            "value": "azure"
+        },
+        "enableRBAC": {
+            "value": true
+        },
+        "enablePrivateCluster": {
+            "value": false
+        },
+        "enableHttpApplicationRouting": {
+            "value": false
+        },
+        "enableAzurePolicy": {
+            "value": false
+        },
+        "vmssNodePool": {
+            "value": true
+        },
+        "vnetSubnetID": {
+            "value": "/subscriptions/2ab8d172-64aa-4bd9-b089-8f1a5df9d899/resourceGroups/aks-rg1/providers/Microsoft.Network/virtualNetworks/aks-rg1-vnet/subnets/default"
+        },
+        "serviceCidr": {
+            "value": "10.0.0.0/16"
+        },
+        "dnsServiceIP": {
+            "value": "10.0.0.10"
+        },
+        "dockerBridgeCidr": {
+            "value": "172.17.0.1/16"
+        },
+        "workspaceName": {
+            "value": "DefaultWorkspace-2ab8d172-64aa-4bd9-b089-8f1a5df9d899-SEA"
+        },
+        "omsWorkspaceId": {
+            "value": "/subscriptions/2ab8d172-64aa-4bd9-b089-8f1a5df9d899/resourceGroups/DefaultResourceGroup-SEA/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-2ab8d172-64aa-4bd9-b089-8f1a5df9d899-SEA"
+        },
+        "workspaceRegion": {
+            "value": "southeastasia"
+        },
+        "networkPolicy": {
+            "value": "azure"
+        }
+    }
+}
