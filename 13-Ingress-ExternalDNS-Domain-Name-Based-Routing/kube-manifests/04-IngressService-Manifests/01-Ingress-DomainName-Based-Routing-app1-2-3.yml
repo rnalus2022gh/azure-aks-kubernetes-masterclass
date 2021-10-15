@@ -6,21 +6,21 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: eapp1.kubeoncloud.com    
+  - host: eapp1.thecure.fun    
     http:
       paths:
       - path: /
         backend:
           serviceName: app1-nginx-clusterip-service
           servicePort: 80
-  - host: eapp2.kubeoncloud.com    
+  - host: eapp2.thecure.fun    
     http:
       paths:
       - path: /
         backend:
           serviceName: app2-nginx-clusterip-service
           servicePort: 80  
-  - host: eapp3.kubeoncloud.com    
+  - host: eapp3.thecure.fun    
     http:
       paths:
       - path: /

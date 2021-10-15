@@ -41,7 +41,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: dkalyanreddy@gmail.com
+    email: nightpain79@gmail.com
     privateKeySecretRef:
       name: letsencrypt
     solvers:
@@ -83,6 +83,11 @@ kubectl  logs -f <cert-manager-55d65894c7-sx62f> -n ingress-basic #Replace Pod n
 
 # Verify SSL Certificates (It should turn to True)
 kubectl get certificate
+
+NAME                   READY   SECRET                 AGE
+sapp1-thecure-secret   True    sapp1-thecure-secret   6m35s
+sapp2-thecure-secret   True    sapp2-thecure-secret   6m35s
+
 ```
 ```log
 stack@Azure:~$ kubectl get certificate
