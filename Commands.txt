@@ -7,6 +7,8 @@ az aks get-credentials --resource-group aks-rg1 --name aksdemo1
 az deployment group create --resource-group aks-rg1 --template-file <path-to-template> --parameters <path-to-parameters>
 az deployment group create --resource-group aks-rg1 --template-file template/template.json --parameters template/parameters.json
 
+ az aks show -n aksdemo1 -g aks-rg1
+
 How to use Azure Resource Manager (ARM) deployment templates with Azure CLI
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli
 
@@ -42,7 +44,7 @@ az group create --name aks-rg1 --location southeastasia
 # Delete a RG
 az group delete --name aks-rg1 --yes
 az group delete --name DefaultResourceGroup-SEA --yes
-
+az group delete --name NetworkWatcherRG --yes
 
 https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest
 az account list
