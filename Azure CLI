@@ -71,6 +71,9 @@ az functionapp list --query "[].state"
 az functionapp list --query "[].{Name:name,Group:resourceGroup,State:state}"
 az functionapp list --query "[0].{Name:name,Group:resourceGroup,State:state}"
 
+az network public-ip list --query "[].name"
+az network public-ip list --query "[1].{Name:name,IP:ipAddress}"
+
 az account list --query "[].state"
 az account list --query "[0].state"
 az account list --query "[0].{Name:name,Group:resourceGroup,State:state}"

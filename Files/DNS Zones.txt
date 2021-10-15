@@ -1,0 +1,10 @@
+ns1-02.azure-dns.com.
+ns2-02.azure-dns.net.
+ns3-02.azure-dns.org.
+ns4-02.azure-dns.info.
+
+ns23.domaincontrol.com
+ns24.domaincontrol.com
+
+nslookup -type=SOA thecure.fun 8.8.8.8
+nslookup -type=NS thecure.fun 8.8.8.8

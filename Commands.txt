@@ -1,13 +1,29 @@
 # Create RG
 az group create --name aks-rg1 --location southeastasia
 
+ cd /d/azure-aks-kubernetes-masterclass/
+
+# Create AKS cluster
+az deployment group create --resource-group aks-rg1 --template-file <path-to-template> --parameters <path-to-parameters>
+az deployment group create --resource-group aks-rg1 --template-file template/template.json --parameters template/parameters.json
+az aks show -n aksdemo1 -g aks-rg1
+
 # get AKS credentials / authentication
 az aks get-credentials --resource-group aks-rg1 --name aksdemo1
 
-az deployment group create --resource-group aks-rg1 --template-file <path-to-template> --parameters <path-to-parameters>
-az deployment group create --resource-group aks-rg1 --template-file template/template.json --parameters template/parameters.json
+# Get the resource group name of the AKS cluster 
+az aks show --resource-group aks-rg1 --name aksdemo1 --query nodeResourceGroup -o tsv
+MC_aks-rg1_aksdemo1_southeastasia
 
- az aks show -n aksdemo1 -g aks-rg1
+# REPLACE - Create Public IP: Replace Resource Group value
+az network public-ip create --resource-group MC_aks-rg1_aksdemo1_southeastasia --name myAKSPublicIPForIngress --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
+13.76.210.86 Oct15
+52.163.71.159
+
+# Show IP ipAddress
+az network public-ip show --name myAKSPublicIPForIngress --resource-group MC_aks-rg1_aksdemo1_southeastasia --query ipAddress
+
+az network public-ip list --query "[1].{Name:name,IP:ipAddress}"
 
 How to use Azure Resource Manager (ARM) deployment templates with Azure CLI
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-cli
@@ -43,8 +59,8 @@ az group create --name aks-rg1 --location southeastasia
 
 # Delete a RG
 az group delete --name aks-rg1 --yes
-az group delete --name DefaultResourceGroup-SEA --yes
 az group delete --name NetworkWatcherRG --yes
+az group delete --name DefaultResourceGroup-SEA --yes
 
 https://docs.microsoft.com/en-us/cli/azure/account?view=azure-cli-latest
 az account list
@@ -63,5 +79,8 @@ Y3VyNUBOSUE=
 
 # Rome - Delete Azure MySQL
 az mysql server delete --name akswebappdbrome --resource-group aks-rg1 --yes
+
+# Output of echo -n 'cur5@NIA' | base64
+  db-password: Y3VyNUBOSUE=
 
 
