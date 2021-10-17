@@ -1,0 +1,8 @@
+Dev Clusters // Request for Early Access
+Team Lens is working on a new feature - Dev Clusters - that will provide a personal Kubernetes environment to all Lens users. You can read more about Dev Clusters on our recent blog post at https://medium.com/k8slens/kubernetes-for-everyone-785959e2c6d7
+
+Dev Clusters will be available in the near future to all users with a Lens Spaces account. Early access is available today to users who are willing to help with testing. We are taking this approach to ensure the quality of the service and to collect vital feedback that will help us improve the feature.
+
+Please fill in this form if you would like to gain Early Access to Dev Clusters and help Team Lens with testing! The usage of this feature during the early access is going to be 100% free of charge.
+
+IMPORTANT! You must have latest version of Lens application installed (version 5.x) and have existing account with Lens Spaces. You can get the latest version of Lens application from https://k8slens.dev. If you don't have Lens Spaces account, you can create it via Lens application (click top right corner "glowing" user profile icon) or directly via web browser at https://app.k8slens.dev/signin

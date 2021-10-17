@@ -75,6 +75,21 @@ az network public-ip list --query "[].name"
 az network public-ip list --query "[1].{Name:name,IP:ipAddress}"
 
 az account list --query "[].state"
+az account list --query "[].id"
+[
+  "01366844-1b1c-4eaa-b391-d4dc9a9ecc0d",
+  "2ab8d172-64aa-4bd9-b089-8f1a5df9d899"
+]
+az account list --query "[].id" -o tsv
+01366844-1b1c-4eaa-b391-d4dc9a9ecc0d
+2ab8d172-64aa-4bd9-b089-8f1a5df9d899
+
+az account list --query "[1].id" -o tsv
+2ab8d172-64aa-4bd9-b089-8f1a5df9d899
+
+az account list --query "[?name=='AzureFree-RomeNalus'].id" -o tsv
+2ab8d172-64aa-4bd9-b089-8f1a5df9d899
+
 az account list --query "[0].state"
 az account list --query "[0].{Name:name,Group:resourceGroup,State:state}"
 
