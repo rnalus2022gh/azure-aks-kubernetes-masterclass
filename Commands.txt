@@ -1,6 +1,11 @@
 # Create RG
 az group create --name aks-rg1 --location southeastasia
 
+az group create --name pscka --location southeastasia
+az deployment group create --resource-group pscka --template-file templates/vmtemplate.json --parameters templates/vmparameters.json
+
+
+
  cd /d/azure-aks-kubernetes-masterclass/
 
 # Create AKS cluster

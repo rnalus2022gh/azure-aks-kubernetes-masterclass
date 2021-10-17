@@ -32,7 +32,7 @@ kubeadm config print init-defaults | tee ClusterConfiguration.yaml
 #5. Update the node name from node to the actual control plane node name, c1-cp1
 
 #Change the address of the localAPIEndpoint.advertiseAddress to the Control Plane Node's IP address
-sed -i 's/  advertiseAddress: 1.2.3.4/  advertiseAddress: 172.16.94.10/' ClusterConfiguration.yaml
+sed -i 's/  advertiseAddress: 1.2.3.4/  advertiseAddress: 172.16.94.4/' ClusterConfiguration.yaml
 
 #Set the CRI Socket to point to containerd
 sed -i 's/  criSocket: \/var\/run\/dockershim\.sock/  criSocket: \/run\/containerd\/containerd\.sock/' ClusterConfiguration.yaml
