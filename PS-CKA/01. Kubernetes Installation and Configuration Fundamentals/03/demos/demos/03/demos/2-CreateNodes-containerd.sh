@@ -43,6 +43,7 @@ sudo sysctl --system
 sudo apt-get update 
 sudo apt-get install -y containerd
 
+https://askubuntu.com/questions/213460/dpkg-error-parsing-file-var-lib-dpkg-updates-0045-near-line-0
 
 #Configure containerd
 sudo mkdir -p /etc/containerd
@@ -82,7 +83,7 @@ EOF'
 
 #Update the package list 
 sudo apt-get update
-apt-cache policy kubelet | head -n 20 
+apt-cache policy kubelet | head -n 50
 
 
 #Install the required packages, if needed we can request a specific version. 
@@ -91,6 +92,10 @@ VERSION=1.21.0-00
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold kubelet kubeadm kubectl containerd
 
+
+sudo apt-get install -y kubelet
+sudo apt-get install -y kubeadm
+sudo apt-get install -y kubectl
 
 #To install the latest, omit the version parameters
 #sudo apt-get install kubelet kubeadm kubectl

@@ -2,8 +2,33 @@
 az group create --name aks-rg1 --location southeastasia
 
 az group create --name pscka --location southeastasia
+# c1-cp1 - Master Node 
 az deployment group create --resource-group pscka --template-file templates/vmtemplate.json --parameters templates/vmparameters.json
+# c1-node1 - Worker Node
+az deployment group create --resource-group pscka --template-file templates/vmtemplate-n1.json --parameters templates/vmparameters-n1.json
 
+https://askubuntu.com/questions/219545/dpkg-error-dpkg-status-database-is-locked-by-another-process
+
+In our case there was no running process (PID) so I hard-stopped and rebooted the VPS.
+
+Next, there are several lock files that might need to be removed:
+
+sudo rm /var/lib/dpkg/lock
+sudo rm /var/lib/dpkg/lock-frontend
+sudo rm /var/cache/apt/archives/lock
+
+Then you can fix dpkg as suggested:
+
+sudo apt update
+sudo dpkg --configure -a
+
+-------------------------
+az group delete --name pscka --yes
+az group delete --name NetworkWatcherRG --yes
+
+PS-CKA
+kubeadm join 172.16.94.4:6443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:aa70fe9ab04375b422fe5cc1b2913de21a15acad305d7f4c8a460a0dceaf6f85
 
 
  cd /d/azure-aks-kubernetes-masterclass/

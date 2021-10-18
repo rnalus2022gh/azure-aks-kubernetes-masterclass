@@ -60,7 +60,9 @@ vi ClusterConfiguration.yaml
 sudo kubeadm init \
     --config=ClusterConfiguration.yaml \
     --cri-socket /run/containerd/containerd.sock
-
+# Rome - Join command
+kubeadm join 172.16.94.4:6443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:4d8f7d9a77d4dcd711f37a91610edddab307f7c6ff85ad1b57c5dc88b61601cd
 
 #Before moving on review the output of the cluster creation process including the kubeadm init phases, 
 #the admin.conf setup and the node join command

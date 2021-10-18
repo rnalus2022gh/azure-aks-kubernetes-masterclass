@@ -90,14 +90,18 @@ EOF'
 
 #Update the package list and use apt-cache policy to inspect versions available in the repository
 sudo apt-get update
-apt-cache policy kubelet | head -n 20 
+apt-cache policy kubelet | head -n 50
 
 
 #Install the required packages, if needed we can request a specific version. 
 #Use this version because in a later course we will upgrade the cluster to a newer version.
 VERSION=1.21.0-00
+#VERSION=1.20.1-00
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold kubelet kubeadm kubectl containerd
+
+sudo apt-get install -y kubelet
+sudo apt-mark hold kubelet
 
 #There is a breaking change in kubernetes 1.22, I will update the course shortly for that change for now use versions less than 1.22
 #To install the latest, omit the version parameters

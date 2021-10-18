@@ -6,10 +6,10 @@
             "value": "southeastasia"
         },
         "networkInterfaceName": {
-            "value": "c1-cp1-nic"
+            "value": "c1-node1-nic"
         },
         "networkSecurityGroupName": {
-            "value": "c1-cp1-nsg"
+            "value": "c1-node1-nsg"
         },
         "networkSecurityGroupRules": {
             "value": [
@@ -50,7 +50,7 @@
             ]
         },
         "publicIpAddressName": {
-            "value": "c1-cp1-ip"
+            "value": "c1-node1-ip"
         },
         "publicIpAddressType": {
             "value": "Dynamic"
@@ -59,10 +59,10 @@
             "value": "Basic"
         },
         "virtualMachineName": {
-            "value": "c1-cp1"
+            "value": "c1-node1"
         },
         "virtualMachineComputerName": {
-            "value": "c1-cp1"
+            "value": "c1-node1"
         },
         "virtualMachineRG": {
             "value": "pscka"
