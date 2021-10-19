@@ -22,6 +22,15 @@ Then you can fix dpkg as suggested:
 sudo apt update
 sudo dpkg --configure -a
 
+sudo rm /var/lib/dpkg/lock
+sudo dpkg --configure -a
+
+--
+#Ok, so now that we're tired of typing commands out, let's enable bash auto-complete of our kubectl commands
+sudo apt-get install -y bash-completion
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+source ~/.bashrc
+kubectl g[tab][tab] po[tab][tab] --all[tab][tab]
 -------------------------
 az group delete --name pscka --yes
 az group delete --name NetworkWatcherRG --yes
@@ -121,3 +130,8 @@ kubectl logs -f $(kubectl get po | egrep -o 'external-dns[A-Za-z0-9-]+')
 # Replace DNS Zones Resource Group and yourdomain
 az network dns record-set a list -g dns-zones -z thecure.fun 
 
+# Select cluster context
+kubectl config get-contexts
+CURRENT   NAME             CLUSTER          AUTHINFO                       NAMESPACE
+*         aksdemo1         aksdemo1         clusterUser_aks-rg1_aksdemo1
+          docker-desktop   docker-desktop   docker-desktop
