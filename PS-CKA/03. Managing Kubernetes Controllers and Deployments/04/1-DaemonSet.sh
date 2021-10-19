@@ -52,6 +52,10 @@ kubectl get daemonsets
 
 #We need a Node that satisfies the Node Selector
 kubectl label node c1-node1 node=hello-world-ns
+# Rome - demo
+kubectl label node aks-agentpool-27193923-vmss000000 node=hello-world-ns
+kubectl describe node aks-agentpool-27193923-vmss000000
+                    node=hello-world-ns
 
 
 #Let's see if a Pod gets created...
@@ -61,6 +65,10 @@ kubectl get pods -o wide
 
 #What's going to happen if we remove the label
 kubectl label node c1-node1 node-
+
+# Rome demo
+kubectl label node aks-agentpool-27193923-vmss000000 node-
+
 
 
 #It's going to terminate the Pod, examine events, Desired Number of Nodes Scheduled...

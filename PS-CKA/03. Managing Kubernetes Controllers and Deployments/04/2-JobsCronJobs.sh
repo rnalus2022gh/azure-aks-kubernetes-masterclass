@@ -23,6 +23,10 @@ kubectl describe job hello-world-job
 kubectl get pods -l job-name=hello-world-job 
 kubectl logs PASTE_POD_NAME_HERE
 
+# Rome demo
+$ kubectl logs hello-world-job-pl7nj
+Hello from Pod hello-world-job-pl7nj at Tue Oct 19 12:28:46 UTC 2021
+
 
 #Our Job is completed, but it's up to use to delete the Pod or the Job.
 kubectl delete job hello-world-job
