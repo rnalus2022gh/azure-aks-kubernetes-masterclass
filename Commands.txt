@@ -143,3 +143,32 @@ kubectl config get-contexts
 CURRENT   NAME             CLUSTER          AUTHINFO                       NAMESPACE
 *         aksdemo1         aksdemo1         clusterUser_aks-rg1_aksdemo1
           docker-desktop   docker-desktop   docker-desktop
+
+# Switch kubernetes cluster context
+kubectl config use-context docker-desktop
+Switched to context "docker-desktop".
+kubectl config set-credentials cluster-admin --username=admin --password=cur5@NIA
+
+# Aliasing
+powershell 
+Set-Alias -Name k -Value kubectl
+
+Mac/Linux
+alias k="kubectl"
+
+
+# k8s lab online
+
+1. Initialize a cluster master node
+
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.5.0.0/16
+
+2. Initialize a cluster networking
+
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+
+3. Create a deployment
+
+kubectl apply -f hhtps://rawgithubuserccontent.com/...
+
+
