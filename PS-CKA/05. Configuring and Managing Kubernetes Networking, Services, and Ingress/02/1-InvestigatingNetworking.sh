@@ -40,6 +40,7 @@ exit
 # Traffic going to other Pods will be sent into the tunnel interface and directly to the Node running the Pod.
 # For more info on Calico's operations https://docs.projectcalico.org/reference/cni-plugin/configuration
 kubectl describe node c1-master | more
+kubectl describe node c1-cp1 | more
 
 
 #Let's see how the traffic gets to c1-node1 from c1-master1
@@ -50,10 +51,55 @@ kubectl describe node c1-master | more
 kubectl get pods -o wide
 route
 
+# Rome demo
+vmadmin@c1-cp1:~$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         _gateway        0.0.0.0         UG    100    0        0 eth0
+168.63.129.16   _gateway        255.255.255.255 UGH   100    0        0 eth0
+169.254.169.254 _gateway        255.255.255.255 UGH   100    0        0 eth0
+172.16.94.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+192.168.13.192  0.0.0.0         255.255.255.192 U     0      0        0 *
+192.168.13.193  0.0.0.0         255.255.255.255 UH    0      0        0 cali0f51864083f
+192.168.13.194  0.0.0.0         255.255.255.255 UH    0      0        0 cali734a59d6acc
+192.168.13.195  0.0.0.0         255.255.255.255 UH    0      0        0 calife5483790ad
+192.168.222.192 c1-node1.intern 255.255.255.192 UG    0      0        0 tunl0
+
 
 #The local tunl0 is 192.168.19.64, packets destined for Pods running on c1-master1 will be routed to this interface and get encapsulated
 #Then send to the destination node for de-encapsulation.
 ip addr
+
+# Rome demo
+vmadmin@c1-cp1:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:22:48:56:3c:d7 brd ff:ff:ff:ff:ff:ff
+    inet 172.16.94.4/24 brd 172.16.94.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::222:48ff:fe56:3cd7/64 scope link
+       valid_lft forever preferred_lft forever
+3: cali0f51864083f@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default    
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
+4: cali734a59d6acc@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default    
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netnsid 1
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
+5: tunl0@NONE: <NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ipip 0.0.0.0 brd 0.0.0.0
+    inet 192.168.13.192/32 scope global tunl0
+       valid_lft forever preferred_lft forever
+8: calife5483790ad@if4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1480 qdisc noqueue state UP group default    
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netnsid 2
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
 
 
 #Log into c1-node1 and look at the interfaces, there's tunl0 192.168.222.192...this is this node's tunnel interface
@@ -63,10 +109,43 @@ ssh aen@c1-node1
 #This tunl0 is the destination interface, on this Node its 192.168.222.192, which we saw on the route listing on c1-master1
 ip addr
 
+# Rome demo:
+vmadmin@c1-node1:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000  
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 00:22:48:57:c8:fe brd ff:ff:ff:ff:ff:ff
+    inet 172.16.94.5/24 brd 172.16.94.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::222:48ff:fe57:c8fe/64 scope link
+       valid_lft forever preferred_lft forever
+3: tunl0@NONE: <NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ipip 0.0.0.0 brd 0.0.0.0
+    inet 192.168.222.192/32 scope global tunl0
+       valid_lft forever preferred_lft forever
+7: califef8c6ba59b@if4: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1480 qdisc noqueue state UP group default    
+    link/ether ee:ee:ee:ee:ee:ee brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet6 fe80::ecee:eeff:feee:eeee/64 scope link
+       valid_lft forever preferred_lft forever
 
 #All Nodes will have routes back to the other Nodes via the tunl0 interface
 route
 
+# Rome demo:
+vmadmin@c1-node1:~$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         _gateway        0.0.0.0         UG    100    0        0 eth0
+168.63.129.16   _gateway        255.255.255.255 UGH   100    0        0 eth0
+169.254.169.254 _gateway        255.255.255.255 UGH   100    0        0 eth0
+172.16.94.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+192.168.13.192  c1-cp1.internal 255.255.255.192 UG    0      0        0 tunl0
+192.168.222.192 0.0.0.0         255.255.255.192 U     0      0        0 *
+192.168.222.194 0.0.0.0         255.255.255.255 UH    0      0        0 califef8c6ba59b
 
 #Exit back to c1-master1
 exit
