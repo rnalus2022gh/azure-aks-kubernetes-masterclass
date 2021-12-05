@@ -19,6 +19,14 @@ az deployment group create --resource-group O365RG --template-file O365_Udemy/DC
 ADFS
 az deployment group create --resource-group O365RG --template-file O365_Udemy/ADFStemplate.json --parameters O365_Udemy/ADFSparameters.json
 
+import-module adsync
+get-adsyncscheduler
+Set-ADSyncScheduler -CustomizedSyncCycleInterval 00:45:00
+Start-ADSyncSyncCycle
+Start-ADSyncSyncCycle -PolicyType Initial
+
+*ms-ds-consistencyguid will only come up if user has same domain in O365
+
 
 # 3 VM Node Pool
 az deployment group create --resource-group aks-rg1 --template-file template/template2.json --parameters template/parameters.json
