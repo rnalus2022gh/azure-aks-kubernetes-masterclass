@@ -194,3 +194,7 @@ kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/m
 kubectl apply -f hhtps://rawgithubuserccontent.com/...
 
 
+====Delete me
+C:\Users\Rome\Downloads
+
+az deployment group create --resource-group RG001 --template-file ExportedTemplate-RG001\template.json --parameters ExportedTemplate-RG001\parameters.json
