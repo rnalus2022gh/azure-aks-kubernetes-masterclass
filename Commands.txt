@@ -5,6 +5,8 @@ az aks get-credentials --resource-group aks-rg1 --name aksdemo1
 az group delete --name aks-rg1 --yes
 az group delete --name NetworkWatcherRG --yes
 
+az group delete --name DefaultResourceGroup-EA --yes
+
 # O365 VMs
 
 az group create --name o365rg --location eastasia
