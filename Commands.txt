@@ -2,11 +2,33 @@
 az group create --name aks-rg1 --location eastasia
 az deployment group create --resource-group aks-rg1 --template-file template/template.json --parameters template/parameters.json
 az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+https://github.com/rnalus/azure-aks-kubernetes-masterclass/tree/master/01-Create-AKS-Cluster
+kubectl get nodes -o wide
+cd /home
+PS /home/rome/.kube> ls -l
+total 16
+drwxr-x--- 4 rome rome 4096 Mar 18 13:21 cache
+-rw------- 1 rome rome 9686 Mar 18 13:21 config
+PS /home/rome/.kube> cat ./config
+
+kubectl get namespaces
+kubectl get pods
+kubectl get pods --all-namespaces
+kubectl get all --all-namespaces
+
+# List Namespaces
+kubectl get namespaces
+kubectl get ns
+
+
+DELETE Resources
 az group delete --name aks-rg1 --yes
 az group delete --name NetworkWatcherRG --yes
 
-az group delete --name DefaultResourceGroup-EA --yes
+az group delete --name DefaultResourceGroup-SEA --yes
 
+=============================================================
 # O365 VMs
 
 az group create --name o365rg --location eastasia
@@ -28,7 +50,7 @@ Start-ADSyncSyncCycle
 Start-ADSyncSyncCycle -PolicyType Initial
 
 *ms-ds-consistencyguid will only come up if user has same domain in O365
-
+=========================================================================
 
 # 3 VM Node Pool
 az deployment group create --resource-group aks-rg1 --template-file template/template2.json --parameters template/parameters.json
