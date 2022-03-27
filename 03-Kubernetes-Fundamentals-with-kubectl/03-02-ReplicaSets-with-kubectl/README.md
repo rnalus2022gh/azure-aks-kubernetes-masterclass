@@ -50,6 +50,10 @@ kubectl describe rs/my-helloworld-rs
 [or]
 kubectl describe rs my-helloworld-rs
 ```
+# Rome - scale/update replcateset
+kubectl scale --replicas=2 -f replicaset-demo.yml 
+replicaset.apps/my-helloworld-rs scaled
+```
 
 ### List of Pods
 - Get list of Pods
