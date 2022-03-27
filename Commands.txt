@@ -25,7 +25,6 @@ kubectl get ns
 DELETE Resources
 az group delete --name aks-rg1 --yes
 az group delete --name NetworkWatcherRG --yes
-
 az group delete --name DefaultResourceGroup-SEA --yes
 
 =============================================================
