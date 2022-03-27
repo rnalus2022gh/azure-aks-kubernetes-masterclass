@@ -17,6 +17,14 @@ kubectl get deployment my-first-deployment -o yaml
 kubectl set image deployment/<Deployment-Name> <Container-Name>=<Container-Image> --record=true
 kubectl set image deployment/my-first-deployment kubenginx=stacksimplify/kubenginx:2.0.0 --record=true
 ```
+rome - update
+kubectl set image deployment/my-first-deployment kubenginx=stacksimplify/kubenginx:2.0.0 --record=true
+Flag --record has been deprecated, --record will be removed in the future
+deployment.apps/my-first-deployment image updated
+
+this should work:
+kubectl set image deployment/my-first-deployment kubenginx=stacksimplify/kubenginx:2.0.0 
+```
 ### Verify Rollout Status (Deployment Status)
 - **Observation:** By default, rollout happens in a rolling update model, so no downtime.
 ```
