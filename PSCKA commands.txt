@@ -17,6 +17,12 @@ az group create --name pscka-rg --location eastasia
 az deployment group create --resource-group pscka-rg --template-file PS-CKA/templates/c1-cp1-temp.json --parameters PS-CKA/templates/c1-cp1-para.json
 az deployment group create --resource-group pscka-rg --template-file PS-CKA/templates/node1-temp.json --parameters PS-CKA/templates/node1-para.json
 az deployment group create --resource-group pscka-rg --template-file PS-CKA/templates/node2-temp.json --parameters PS-CKA/templates/node2-para.json
+az deployment group create --resource-group pscka-rg --template-file PS-CKA/templates/node3-temp.json --parameters PS-CKA/templates/node3-para.json
 
 
 https://github.com/uglide/azure-content/blob/master/articles/virtual-network/virtual-network-deploy-static-pip-arm-template.md
+
+
+DELETE
+az group delete --name pscka-rg --yes
+az group delete --name NetworkWatcherRG --yes
