@@ -32,7 +32,9 @@ apt-cache policy kubelet | head -n 20
 
 #Install the required packages, if needed we can request a specific version. 
 #Use this version because in a later course we will upgrade the cluster to a newer version.
+
 VERSION=1.21.0-00
+VERSION=1.22.7-00
 sudo apt-get install -y docker.io kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold docker.io kubelet kubeadm kubectl
 

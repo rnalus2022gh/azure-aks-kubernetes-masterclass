@@ -6,7 +6,7 @@
 #   5. Take snapshots prior to installation, this way you can install 
 #       and revert to snapshot if needed 
 #
-ssh aen@c1-cp1
+ssh adm-rnalus@c1-cp1
 
 
 #0 - Disable swap, swapoff then edit your fstab removing any entry for swap partitions
@@ -99,6 +99,8 @@ VERSION=1.21.0-00
 #VERSION=1.20.1-00
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold kubelet kubeadm kubectl containerd
+
+---------
 
 sudo apt-get install -y kubelet
 sudo apt-mark hold kubelet

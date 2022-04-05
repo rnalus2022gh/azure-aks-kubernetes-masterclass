@@ -64,6 +64,10 @@ sudo kubeadm init \
 kubeadm join 172.16.94.4:6443 --token abcdef.0123456789abcdef \
         --discovery-token-ca-cert-hash sha256:5723090157d9972dd1080987d494112bc0cfe4d2de8193c16435a69794a8f2c9
 
+kubeadm join 172.16.94.4:6443 --token abcdef.0123456789abcdef \
+        --discovery-token-ca-cert-hash sha256:bbfde9ba876c5a27739c2aa453cc96220c6b225563bbd7a3a8765c9790c0dc1f
+
+
 #Before moving on review the output of the cluster creation process including the kubeadm init phases, 
 #the admin.conf setup and the node join command
 
@@ -91,6 +95,18 @@ kubectl get pods --all-namespaces --watch
 #All system pods should be Running
 kubectl get pods --all-namespaces
 
+NAMESPACE     NAME                                       READY   STATUS    RESTARTS   AGE
+kube-system   calico-kube-controllers-6fd7b9848d-k57ms   1/1     Running   0          3m23s
+kube-system   calico-node-7p7hs                          1/1     Running   0          3m23s
+kube-system   coredns-558bd4d5db-6m8wx                   1/1     Running   0          5m15s
+kube-system   coredns-558bd4d5db-g7nh9                   1/1     Running   0          5m15s
+kube-system   etcd-c1-cp1                                1/1     Running   0          5m23s
+kube-system   kube-apiserver-c1-cp1                      1/1     Running   0          5m23s
+kube-system   kube-controller-manager-c1-cp1             1/1     Running   0          5m23s
+kube-system   kube-proxy-clncn                           1/1     Running   0          5m15s
+kube-system   kube-scheduler-c1-cp1                      1/1     Running   0          5m23s
+
+
 
 #Get a list of our current nodes, just the Control Plane Node/Master Node...should be Ready.
 kubectl get nodes 
@@ -107,6 +123,7 @@ sudo systemctl status kubelet.service
 #3 - Static Pod manifests
 #Let's check out the static pod manifests on the Control Plane Node
 ls /etc/kubernetes/manifests
+etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml
 
 
 #And look more closely at API server and etcd's manifest.
@@ -116,3 +133,13 @@ sudo more /etc/kubernetes/manifests/kube-apiserver.yaml
 
 #Check out the directory where the kubeconfig files live for each of the control plane pods.
 ls /etc/kubernetes
+admin.conf  controller-manager.conf  kubelet.conf  manifests  pki  scheduler.conf
+
+ls -l /etc/kubernetes
+total 36
+-rw------- 1 root root 5591 Apr  5 14:35 admin.conf
+-rw------- 1 root root 5623 Apr  5 14:35 controller-manager.conf
+-rw------- 1 root root 1915 Apr  5 14:36 kubelet.conf
+drwxr-xr-x 2 root root 4096 Apr  5 14:35 manifests
+drwxr-xr-x 3 root root 4096 Apr  5 14:35 pki
+-rw------- 1 root root 5571 Apr  5 14:35 scheduler.conf
